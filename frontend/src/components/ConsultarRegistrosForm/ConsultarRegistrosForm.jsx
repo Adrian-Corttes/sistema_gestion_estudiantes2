@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import {Modal} from '../Modal'
 
 
 export const ConsultarRegistrosForm = () => {
@@ -8,6 +9,7 @@ export const ConsultarRegistrosForm = () => {
   const [estudiantes, setEstudiantes] = useState([]);
   const [pruebas, setPruebas] = useState([]);
   const [mensaje, setMensaje] = useState('');
+  const [modalOpen, setModalOpen] = useState(false); // Estado para controlar el modal
 
   // Cargar estudiantes y pruebas al montar el componente
   useEffect(() => {
@@ -47,11 +49,16 @@ export const ConsultarRegistrosForm = () => {
         setMensaje("No se tiene información correspondiente al estudiante");
       } else {
         setResultados(data);
+        setModalOpen(true); // Abrir el modal al recibir resultados
       }
     } catch (error) {
       console.error("Error al consultar los resultados:", error);
       setMensaje("Error al consultar los resultados");
     }
+  };
+
+  const closeModal = () => {
+    setModalOpen(false); // Función para cerrar el modal
   };
 
   return (
@@ -91,28 +98,31 @@ export const ConsultarRegistrosForm = () => {
 
       {mensaje && <p className="form-message">{mensaje}</p>}
 
-      {resultados.length > 0 && (
-        <table className="result-table">
-          <thead>
-            <tr>
-              <th>Pregunta N°</th>
-              <th>Respuesta Correcta</th>
-              <th>Respuesta del Estudiante</th>
-              <th>Acierto</th>
-            </tr>
-          </thead>
-          <tbody>
-            {resultados.map((resultado, index) => (
-              <tr key={index}>
-                <td>{resultado.preguntaNumero}</td>
-                <td>{resultado.respuestaCorrecta}</td>
-                <td>{resultado.respuestaEstudiante}</td>
-                <td>{resultado.acierto}</td>
+      {/* Modal para mostrar los resultados */}
+      <Modal isOpen={modalOpen} onClose={closeModal}>
+        {resultados.length > 0 && (
+          <table className="result-table">
+            <thead>
+              <tr>
+                <th>Pregunta N°</th>
+                <th>Respuesta Correcta</th>
+                <th>Respuesta del Estudiante</th>
+                <th>Acierto</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
+            </thead>
+            <tbody>
+              {resultados.map((resultado, index) => (
+                <tr key={index}>
+                  <td>{resultado.preguntaNumero}</td>
+                  <td>{resultado.respuestaCorrecta}</td>
+                  <td>{resultado.respuestaEstudiante}</td>
+                  <td>{resultado.acierto}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </Modal>
     </div>
   );
 };

@@ -1,19 +1,22 @@
-import { useState } from 'react';
-import { CrearRegistrosForm, ConsultarRegistrosForm } from './components';
+// src/App.jsx
+import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import { CrearRegistrosForm, ConsultarRegistrosForm, } from './components'; // Asegúrate de que estas rutas sean correctas
 import './App.css';
 
 function App() {
   return (
-    <div id="root">
-      <div className="form-wrapper">
-        <div className="">
-          <CrearRegistrosForm />
-        </div>
-        <div className="">
-          <ConsultarRegistrosForm />
-        </div>
+    <Router>
+      <div id="root">
+        <nav>
+          <Link to="/">Crear Resultados</Link>
+          <Link to="/consultar">Consultar Resultados</Link>
+        </nav>
+        <Routes>
+          <Route path="/" element={<CrearRegistrosForm />} />
+          <Route path="/consultar" element={<ConsultarRegistrosForm />} />
+        </Routes>
       </div>
-    </div>
+    </Router>
   );
 }
 
