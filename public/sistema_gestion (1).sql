@@ -1,4 +1,8 @@
+CREATE DATABASE sistema_gestion;
 
+USE sistema_gestion;
+
+-- Se Crea la tabla `estudiante`
 CREATE TABLE `estudiante` (
   `ID` int(11) NOT NULL,
   `Nombres` varchar(100) NOT NULL,
@@ -6,9 +10,6 @@ CREATE TABLE `estudiante` (
   `Salon` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Volcado de datos para la tabla `estudiante`
---
 
 INSERT INTO `estudiante` (`ID`, `Nombres`, `Grado`, `Salon`) VALUES
 (1, 'sabela Moreno Castro', '6', '1'),
@@ -19,9 +20,8 @@ INSERT INTO `estudiante` (`ID`, `Nombres`, `Grado`, `Salon`) VALUES
 
 -- --------------------------------------------------------
 
---
 -- Estructura de tabla para la tabla `pregunta`
---
+
 
 CREATE TABLE `pregunta` (
   `ID` int(11) NOT NULL,
@@ -30,9 +30,9 @@ CREATE TABLE `pregunta` (
   `IDPrueba` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
+
 -- Volcado de datos para la tabla `pregunta`
---
+
 
 INSERT INTO `pregunta` (`ID`, `Respuesta`, `Orden`, `IDPrueba`) VALUES
 (1, 'A', 1, 1),

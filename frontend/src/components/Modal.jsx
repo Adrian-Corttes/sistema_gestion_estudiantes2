@@ -1,5 +1,5 @@
 // Modal.jsx
-import React from 'react';
+
 import './Modal.css'; // Importa el archivo CSS para los estilos del modal
 
 export const Modal = ({ isOpen, onClose, children }) => {

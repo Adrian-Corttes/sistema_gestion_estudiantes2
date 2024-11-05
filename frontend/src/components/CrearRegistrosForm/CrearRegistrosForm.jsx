@@ -1,57 +1,74 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import './CrearRegistrosForm.css';
 
 export const CrearRegistrosForm = () => {
-  //estudiantes, pruebas, y preguntas: Guardan listas de opciones para seleccionar en el formulario.
+  // Estados para almacenar listas de estudiantes, pruebas y preguntas
   const [estudiantes, setEstudiantes] = useState([]);
   const [pruebas, setPruebas] = useState([]);
   const [preguntas, setPreguntas] = useState([]);
-  //selectedEstudiante, selectedPrueba, y selectedPregunta: Guardan los valores seleccionados por el usuario en los respectivos campos.
+  // Estados para almacenar los valores seleccionados en el formulario
   const [selectedEstudiante, setSelectedEstudiante] = useState('');
   const [selectedPrueba, setSelectedPrueba] = useState('');
   const [selectedPregunta, setSelectedPregunta] = useState('');
-  //respuesta: Almacena la respuesta ingresada por el usuario.
+  // Estado para almacenar la respuesta ingresada por el usuario
   const [respuesta, setRespuesta] = useState('');
-  //message: Contiene mensajes para el usuario, como confirmación o errores.
+  // Estado para mostrar mensajes al usuario
   const [message, setMessage] = useState('');
 
-  // Se carga los datos iniciales de estudiantes y pruebas al montar el componente.
+  // Carga inicial de datos de estudiantes y pruebas al montar el componente
   useEffect(() => {
-    //Se realiza la solicitud para obtener estudiantes desde la API.
-    fetch('http://localhost:3000/estudiantes')
-      .then(response => response.json())
-      //Se guarda los datos obtenidos en estudiantes, o un arreglo vacío si no se recibe un arreglo.
-      .then(data => setEstudiantes(Array.isArray(data) ? data : []))
-      .catch(error => console.error('Error al cargar estudiantes:', error));
+    // Función asincrónica para obtener estudiantes desde la API
+    const fetchEstudiantes = async () => {
+      try {
+        const response = await fetch('http://localhost:3000/estudiantes');
+        const data = await response.json();
+        setEstudiantes(Array.isArray(data) ? data : []);
+      } catch (error) {
+        console.error('Error al cargar estudiantes:', error);
+      }
+    };
 
-    //Se obtiene datos para pruebas y los guarda en pruebas.  
-    fetch('http://localhost:3000/pruebas')
-      .then(response => response.json())
-      .then(data => setPruebas(Array.isArray(data) ? data : []))
-      .catch(error => console.error('Error al cargar pruebas:', error));
+    // Función asincrónica para obtener pruebas desde la API
+    const fetchPruebas = async () => {
+      try {
+        const response = await fetch('http://localhost:3000/pruebas');
+        const data = await response.json();
+        setPruebas(Array.isArray(data) ? data : []);
+      } catch (error) {
+        console.error('Error al cargar pruebas:', error);
+      }
+    };
+
+    // Llamadas a las funciones para cargar los datos
+    fetchEstudiantes();
+    fetchPruebas();
   }, []);
 
-  //Este hook carga las preguntas basadas en la prueba seleccionada (selectedPrueba)
+  // Carga de preguntas basada en la prueba seleccionada
   useEffect(() => {
-    // Solo realiza la solicitud si selectedPrueba tiene un valor.
-    if (selectedPrueba) {
-      //Se hace una solicitud a la API para obtener preguntas relacionadas con la prueba seleccionada.
-      fetch(`http://localhost:3000/preguntas/${selectedPrueba}`)
-        .then(response => response.json())
-        //Se guarda las preguntas obtenidas o un arreglo vacío si no se recibe un arreglo.
-        .then(data => setPreguntas(Array.isArray(data) ? data : []))
-        .catch(error => console.error('Error al cargar preguntas:', error));
-    } else {
-      setPreguntas([]);
-    }
+    // Función asincrónica para obtener preguntas según la prueba seleccionada
+    const fetchPreguntas = async () => {
+      if (selectedPrueba) { // Verifica si hay una prueba seleccionada
+        try {
+          const response = await fetch(`http://localhost:3000/preguntas/${selectedPrueba}`);
+          const data = await response.json();
+          setPreguntas(Array.isArray(data) ? data : []);
+        } catch (error) {
+          console.error('Error al cargar preguntas:', error);
+        }
+      } else {
+        setPreguntas([]); // Resetea preguntas si no hay prueba seleccionada
+      }
+    };
+
+    fetchPreguntas();
   }, [selectedPrueba]);
 
-  //Esta función se llama cuando se envía el formulario.
+  // Maneja el envío del formulario
   const handleSubmit = async (e) => {
-    //Se previene el comportamiento por defecto de recargar la página.
-    e.preventDefault();
+    e.preventDefault(); // Previene el comportamiento predeterminado del formulario
     try {
-      //Se realiza una solicitud POST para enviar los datos del formulario.
+      // Realiza una solicitud POST a la API para guardar el registro
       const response = await fetch('http://localhost:3000/resultados', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -63,9 +80,8 @@ export const CrearRegistrosForm = () => {
         }),
       });
       const data = await response.json();
-      //Se muestra un mensaje de éxito o error al usuario, según el resultado de la operación.
+      // Muestra un mensaje de éxito o error en función del resultado
       setMessage(data.message || 'Registro creado con éxito');
-
     } catch (error) {
       console.error('Error al guardar el registro:', error);
       setMessage('Hubo un error al crear el registro');
