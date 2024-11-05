@@ -1,6 +1,5 @@
-// src/App.jsx
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
-import { CrearRegistrosForm, ConsultarRegistrosForm, } from './components'; // Asegúrate de que estas rutas sean correctas
+import { CrearRegistrosForm, ConsultarRegistrosForm, } from './components';
 import './App.css';
 
 function App() {
