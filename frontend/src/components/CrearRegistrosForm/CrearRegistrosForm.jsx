@@ -53,6 +53,7 @@ export const CrearRegistrosForm = () => {
           const response = await fetch(`http://localhost:3000/preguntas/${selectedPrueba}`);
           const data = await response.json();
           setPreguntas(Array.isArray(data) ? data : []);
+          
         } catch (error) {
           console.error('Error al cargar preguntas:', error);
         }

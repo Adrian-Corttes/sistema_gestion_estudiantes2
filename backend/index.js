@@ -52,6 +52,7 @@ app.get('/pruebas', async (req, res) => {
     const [rows] = await connection.execute('SELECT * FROM Prueba');
     await connection.end();
     res.json(rows);
+
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -70,6 +71,7 @@ app.get('/preguntas/:pruebaId', async (req, res) => {
     );
     await connection.end();
     res.json(rows);
+    
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
