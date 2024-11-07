@@ -44,32 +44,37 @@ export const CrearRegistrosForm = () => {
     fetchPruebas();
   }, []);
 
-  // Carga de preguntas basada en la prueba seleccionada
+  // Cargue de preguntas basada en la prueba seleccionada
+  //se usa para ejecutar el código cada vez que (selectedPrueba) cambia.
   useEffect(() => {
     // Función asincrónica para obtener preguntas según la prueba seleccionada
     const fetchPreguntas = async () => {
-      if (selectedPrueba) { // Verifica si hay una prueba seleccionada
+      //Solo se procede si selectedPrueba contiene un valor válido (es decir, si el usuario seleccionó una prueba).
+      if (selectedPrueba) { 
         try {
+          //Se hace una solicitud GET a la API, usando el ID de la prueba seleccionada (selectedPrueba) en la URL.
           const response = await fetch(`http://localhost:3000/preguntas/${selectedPrueba}`);
           const data = await response.json();
+          //Si no es un array, se asigna un array vacío.
           setPreguntas(Array.isArray(data) ? data : []);
           
         } catch (error) {
           console.error('Error al cargar preguntas:', error);
         }
       } else {
-        setPreguntas([]); // Resetea preguntas si no hay prueba seleccionada
+        //Si no hay prueba seleccionada, se vacía el estado preguntas.
+        setPreguntas([]); 
       }
     };
 
     fetchPreguntas();
   }, [selectedPrueba]);
 
-  // Maneja el envío del formulario
+  // Maneja el envío del formulario que permite registrar una respuesta.
   const handleSubmit = async (e) => {
     e.preventDefault(); // Previene el comportamiento predeterminado del formulario
     try {
-      // Realiza una solicitud POST a la API para guardar el registro
+      // Al enviar el formulario, se hace una solicitud POST a /resultados con el estudiante, prueba, pregunta y respuesta.
       const response = await fetch('http://localhost:3000/resultados', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -83,6 +88,7 @@ export const CrearRegistrosForm = () => {
       const data = await response.json();
       // Muestra un mensaje de éxito o error en función del resultado
       setMessage(data.message || 'Registro creado con éxito');
+
     } catch (error) {
       console.error('Error al guardar el registro:', error);
       setMessage('Hubo un error al crear el registro');
@@ -123,7 +129,7 @@ export const CrearRegistrosForm = () => {
         ))}
       </select>
 
-      <label className="form-label">Pregunta (Orden):</label>
+      <label className="form-label">Pregunta:</label>
       <select
         className="form-select"
         value={selectedPregunta}
