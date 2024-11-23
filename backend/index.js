@@ -15,7 +15,7 @@ app.use(cors());
 app.use(bodyParser.json());
 
 const dbConfig = {
-  //Se Define un objeto de configuración para conectar a la base de datos MySQL, especificando
+  //Se Define un objeto de configuración para conectar a la base de datos MySQL, especificando:
   host: 'localhost',
   user: 'root',
   password: '',
@@ -128,8 +128,8 @@ app.get('/reporte/:IDEstudiante/:IDPrueba', async (req, res) => {
   }
 });
 
-
+const PORT = process.env.PORT ?? 3000
 // Se inicia el servidor en el puerto 3000.
-app.listen(3000, () => {
-  console.log('Servidor ejecutándose en http://localhost:3000');
-});
+app.listen(PORT, () => {
+  console.log(`server listening on port http://localhost:${PORT}`)
+})
